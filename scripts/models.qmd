@@ -1,0 +1,128 @@
+---
+title: "models"
+---
+
+# Setup Data for Models
+
+Load packages
+
+```{r}
+#| label: load-packages
+#| message: false
+library(tidyverse)
+library(tidymodels)
+```
+
+Glimpse data
+
+```{r}
+#| label: glimpse-tagging
+
+whale_data = read_csv(".csv")
+glimpse(whale_data)
+```
+
+Split data
+
+```{r}
+#| label: train-test-split
+
+set.seed(1234)
+whale_split <- initial_split(whale_data, prop = 0.75)
+whale_train <- training(whale_split)
+whale_test <- testing(whale_split)
+```
+
+# Model 1-3: Additive Logistic Regression
+
+```{r}
+#| label: feeding-additive-logistic-fit
+
+whale_additive_logistic_fit <- logistic_reg() |>
+  fit(feeding ~ acceleration + pitch, data = whale_train)
+tidy(whale_additive_logistic_fit)
+```
+
+```{r}
+#| label: additive_aug
+#| 
+whale_additive_logistic_aug <- augment(whale_additive_logistic_fit, new_data = whale_test)
+
+```
+
+```{r}
+#| label: feeding-additive-logistic-fit
+
+whale_additive_logistic_fit <- logistic_reg() |>
+  fit(feeding ~ acceleration + pitch + yaw, data = whale_train)
+tidy(whale_additive_logistic_fit)
+```
+
+```{r}
+#| label: feeding-additive-logistic-fit
+
+whale_additive_logistic_fit <- logistic_reg() |>
+  fit(feeding ~ acceleration + pitch + yaw + depth, data = whale_train)
+tidy(whale_additive_logistic_fit)
+```
+
+# Model 4-6: Interactive Logistic Regression
+
+```{r}
+#| label: feeding-additive-logistic-fit
+
+whale_interactive_logistic_fit <- logistic_reg() |>
+  fit(feeding ~ acceleration * pitch, data = whale_train)
+tidy(whale_additive_logistic_fit)
+```
+
+# Model 7-9: Random Forest Classification
+
+A **decision tree** is a machine learning model used for both classification and regression tasks. It works by splitting data into branches based on decision rules derived from the dataset's features (or variables). Each branch represents a decision path, and the final nodes (leaves) provide predictions.
+
+A **random forest** is an ensemble learning method that uses multiple decision trees to improve prediction accuracy and reduce overfitting. Each tree is trained on a random subset of the data and features, and the final prediction is made by averaging (regression) or taking the majority vote (classification) of all trees.
+
+```{r}
+#| label: feeding-random-forest-model
+
+random_forest_model <- rand_forest(
+  trees = 500,                # Number of trees
+  mtry = 3,                   # Number of predictors randomly sampled at each split
+  min_n = 5,                  # Minimum number of data points in a node before splitting
+  mode = "classification"     # Classification problem
+) 
+```
+
+```{r}
+#| label: feeding-random-forest-classification
+
+feeding_random_forest <- random_forest_model |>
+  fit(feeding ~ , data = whale_train)
+tidy(feeding_random_forest)
+```
+
+# Model 10: Boosted Tree Classification
+
+**Boosting**: It is an iterative process where each subsequent tree tries to correct the errors of the previous ones by giving more weight to misclassified data points.
+
+```{r}
+#| label: feeding-boosted-tree-model
+#| 
+boosted_tree_model <- boost_tree(
+  trees = 1000,           # Number of trees
+  tree_depth = 6,         # Maximum depth of each tree
+  learn_rate = 0.1,       # Learning rate for boosting
+  loss_reduction = 0.01,  # Minimum improvement to split further
+  mode = "classification" # Classification problem
+) 
+```
+
+```{r}
+#| label: feeding-boosted-tree-classification
+
+boosted_tree_fit <- boosted_tree_model |> 
+  fit(forested ~ elevation + tree_no_tree + lon + lat + temp_annual_mean, data = forested_train)
+tidy(boosted_tree_fit)
+```
+
+# Model Performance
