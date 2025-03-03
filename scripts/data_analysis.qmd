@@ -2,3 +2,5 @@
 title: "data_analysis"
 format: html
 ---
+
+Discover a threshold for acceleration values or other variable: feeding events almost always are above this threshold.
