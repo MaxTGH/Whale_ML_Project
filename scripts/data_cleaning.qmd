@@ -2,7 +2,7 @@
 title: "data cleaning"
 ---
 
-Sampling Rate is 5 times per second. Every 0.2 seconds, a reading is recorded.
+Sampling Rate is 5 times per second. Every 0.2 seconds, a reading is recorded. double check
 
 ```{r}
 #| label: load-packages
@@ -48,8 +48,27 @@ accelerationWCondensed <- accelerationW |>
   summarise(across(everything(), mean, na.rm = TRUE)) |> 
   select(-group)
 
+
+```
+
+```{r}
+#| label: accel-change
 accelerationWCondensed <- accelerationWCondensed |>
   mutate(
-    time_secs = row_number()
-  )
+    #deltaX = x - lag(x),
+    #deltaY = y - lag(y),
+    #deltaZ = z - lag(z),
+    magA = sqrt(x^2 + y^2 + z^2),
+    deltamagA = magA - lag(magA)
+  ) 
+         
+
+
+```
+
+```{r}
+
+ggplot(accelerationWCondensed, aes(time_secs, )) +
+  geom_point()
+
 ```
