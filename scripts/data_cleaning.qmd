@@ -2,7 +2,7 @@
 title: "data cleaning"
 ---
 
-Data Import
+Sampling Rate is 5.
 
 ```{r}
 #| label: load-packages
@@ -12,7 +12,39 @@ library(tidymodels)
 ```
 
 ```{r}
+#| label: read-data
+
+rawAccelerationW <- read_csv("/Volumes/T7 Shield/Whale_ML_Project/data/raw/accelerationw.csv", col_names = FALSE)
+```
+
+```{r}
+#| label: clean-data
+
+gravity = 9.80665
+
+accelerationW <- rawAccelerationW |>
+  rename(
+    x = X1,
+    y = X2,
+    z = X3
+  ) |>
+  mutate(
+    x = x * gravity,     #convert from G to meters per second squared
+    y = y * gravity,
+    z = z * gravity
+  )
 
 
-accelerationW <- read_csv("data/raw/accelerationw.csv")
+```
+
+```{r}
+#| label: condense-data-by-5 
+
+#Sampling rate in terms of time unknown
+
+accelerationWCondensed <- accelerationW |>
+  mutate(group = ceiling(row_number() / 5)) |>  # Create a grouping variable
+  group_by(group) |>
+  summarise(across(everything(), mean, na.rm = TRUE)) |> 
+  select(-group)
 ```
