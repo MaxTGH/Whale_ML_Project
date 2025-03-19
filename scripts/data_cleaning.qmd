@@ -2,3 +2,17 @@
 title: "data cleaning"
 ---
 
+Data Import
+
+```{r}
+#| label: load-packages
+
+library(tidyverse)
+library(tidymodels)
+```
+
+```{r}
+
+
+accelerationW <- read_csv("data/raw/accelerationw.csv")
+```
