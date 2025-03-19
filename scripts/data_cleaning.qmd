@@ -2,7 +2,7 @@
 title: "data cleaning"
 ---
 
-Sampling Rate is 5.
+Sampling Rate is 5 times per second. Every 0.2 seconds, a reading is recorded.
 
 ```{r}
 #| label: load-packages
@@ -47,4 +47,9 @@ accelerationWCondensed <- accelerationW |>
   group_by(group) |>
   summarise(across(everything(), mean, na.rm = TRUE)) |> 
   select(-group)
+
+accelerationWCondensed <- accelerationWCondensed |>
+  mutate(
+    time_secs = row_number()
+  )
 ```

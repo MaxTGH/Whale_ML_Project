@@ -3,4 +3,11 @@ title: "data_analysis"
 format: html
 ---
 
+```{r}
+#| label: load-packages
+
+library(tidymodels)
+library(tidyverse)
+```
+
 Discover a threshold for acceleration values or other variable: feeding events almost always are above this threshold.
