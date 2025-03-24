@@ -18,7 +18,7 @@ Glimpse data
 ```{r}
 #| label: glimpse-tagging
 
-whale_data = read_csv(".csv")
+whale_data = accelerationWCondensed
 glimpse(whale_data)
 ```
 
@@ -34,6 +34,10 @@ whale_test <- testing(whale_split)
 ```
 
 # Model 1-3: Additive Logistic Regression
+
+```{r}
+
+```
 
 ```{r}
 #| label: feeding-additive-logistic-fit

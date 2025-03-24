@@ -55,9 +55,9 @@ accelerationWCondensed <- accelerationW |>
 #| label: accel-change
 accelerationWCondensed <- accelerationWCondensed |>
   mutate(
-    #deltaX = x - lag(x),
-    #deltaY = y - lag(y),
-    #deltaZ = z - lag(z),
+    deltaX = x - lag(x),
+    deltaY = y - lag(y),
+    deltaZ = z - lag(z),
     magA = sqrt(x^2 + y^2 + z^2),
     deltamagA = magA - lag(magA)
   ) 
@@ -68,7 +68,7 @@ accelerationWCondensed <- accelerationWCondensed |>
 
 ```{r}
 
-ggplot(accelerationWCondensed, aes(time_secs, )) +
+ggplot(accelerationWCondensed, aes(time_secs, x)) +
   geom_point()
 
 ```
